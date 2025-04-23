@@ -3,114 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的計數器</title>
+    <title>共享計數器</title>
     <style>
         body {
             font-family: sans-serif;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f8f9fa; /* 淺灰色背景 */
-        }
-        .counter-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* 確保標題置中 */
-        }
-        h2 { /* 新增標題樣式 */
-            color: #555;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-        .controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-        .arrow-button {
-            background: none;
-            border: none;
-            font-size: 1.5em;
-            color: #aaa;
-            cursor: pointer;
-            padding: 5px 10px;
         }
         #counter-display {
-            font-size: 1.8em;
-            margin: 0 15px;
-            color: #333;
-            font-weight: bold;
-            min-width: 30px; /* 確保數字不會擠在一起 */
-            text-align: center;
+            font-size: 2em;
+            margin: 20px;
         }
-        #reset-btn {
-            background: none;
-            border: none;
-            color: #888;
+        button {
+            padding: 10px 20px;
+            margin: 5px;
             cursor: pointer;
-            font-size: 0.9em;
-            padding: 5px;
-            margin-top: 10px;
-        }
-        #reset-btn:hover {
-            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="counter-container">
-        <h2>集數</h2>
-        <div class="controls">
-            <button id="decrement-btn" class="arrow-button">▼</button>
-            <div id="counter-display">0</div>
-            <button id="increment-btn" class="arrow-button">▲</button>
-        </div>
-        <button id="reset-btn">reset</button>
-    </div>
+    <h1>共享計數器</h1>
+    <div id="counter-display">載入中...</div>
+    <button id="increment-btn">增加</button>
+    <button id="decrement-btn">減少</button>
+    <button id="reset-btn">重置</button>
 
     <script>
-        let counterDisplay = document.getElementById('counter-display');
-        let incrementBtn = document.getElementById('increment-btn');
-        let decrementBtn = document.getElementById('decrement-btn');
-        let resetBtn = document.getElementById('reset-btn');
-        const STORAGE_KEY = 'myCounterValue'; // 定義一個用於儲存的 key
+        const counterDisplay = document.getElementById('counter-display');
+        const incrementBtn = document.getElementById('increment-btn');
+        const decrementBtn = document.getElementById('decrement-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const DATA_URL = 'https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/my-shared-counter/main/counter.json'; // 替換成您的 GitHub 資訊
 
-        // 載入儲存的計數值
-        let count = localStorage.getItem(STORAGE_KEY);
-        if (count === null) {
-            count = 0; // 如果沒有儲存過，則從 0 開始
-        } else {
-            count = parseInt(count); // 將儲存的字串轉換為數字
+        let currentCount = 0;
+
+        // 從 GitHub 讀取計數值
+        async function fetchCount() {
+            try {
+                const response = await fetch(DATA_URL);
+                const data = await response.json();
+                currentCount = data.count;
+                counterDisplay.textContent = currentCount;
+            } catch (error) {
+                console.error("無法載入計數值:", error);
+                counterDisplay.textContent = '載入失敗';
+            }
         }
-        counterDisplay.textContent = count; // 顯示載入的計數值
 
-        // 更新並儲存計數值的函數
-        function updateCounter(newValue) {
-            count = newValue;
-            counterDisplay.textContent = count;
-            localStorage.setItem(STORAGE_KEY, count); // 將計數值儲存到 Local Storage
+        // 模擬更新計數值 (這個範例不會直接寫回 GitHub)
+        function updateDisplay() {
+            counterDisplay.textContent = currentCount;
         }
 
         incrementBtn.addEventListener('click', () => {
-            updateCounter(count + 1);
+            currentCount++;
+            updateDisplay();
+            console.log("新的計數值 (尚未寫回 GitHub):", currentCount);
+            alert("計數值已在本地更新。要讓其他使用者看到，您需要手動更新 GitHub 上的 counter.json 檔案。");
+            // 在實際應用中，您需要呼叫一個後端服務或 GitHub API 來更新 counter.json
         });
 
         decrementBtn.addEventListener('click', () => {
-            updateCounter(count - 1);
+            currentCount--;
+            updateDisplay();
+            console.log("新的計數值 (尚未寫回 GitHub):", currentCount);
+            alert("計數值已在本地更新。要讓其他使用者看到，您需要手動更新 GitHub 上的 counter.json 檔案。");
+            // 在實際應用中，您需要呼叫一個後端服務或 GitHub API 來更新 counter.json
         });
 
         resetBtn.addEventListener('click', () => {
-            updateCounter(0); // 重置為 0
+            currentCount = 0;
+            updateDisplay();
+            console.log("新的計數值 (尚未寫回 GitHub):", currentCount);
+            alert("計數值已在本地更新。要讓其他使用者看到，您需要手動更新 GitHub 上的 counter.json 檔案。");
+            // 在實際應用中，您需要呼叫一個後端服務或 GitHub API 來更新 counter.json
         });
+
+        // 頁面載入時獲取初始計數值
+        fetchCount();
     </script>
 </body>
 </html>
