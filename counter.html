@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的計數器</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa; /* 淺灰色背景 */
+        }
+        .counter-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 確保標題置中 */
+        }
+        h2 { /* 新增標題樣式 */
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        .arrow-button {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            color: #aaa;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+        #counter-display {
+            font-size: 1.8em;
+            margin: 0 15px;
+            color: #333;
+            font-weight: bold;
+            min-width: 30px; /* 確保數字不會擠在一起 */
+            text-align: center;
+        }
+        #reset-btn {
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 0.9em;
+            padding: 5px;
+            margin-top: 10px;
+        }
+        #reset-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="counter-container">
+        <h2>集數</h2>
+        <div class="controls">
+            <button id="decrement-btn" class="arrow-button">▼</button>
+            <div id="counter-display">0</div>
+            <button id="increment-btn" class="arrow-button">▲</button>
+        </div>
+        <button id="reset-btn">reset</button>
+    </div>
+
+    <script>
+        let counterDisplay = document.getElementById('counter-display');
+        let incrementBtn = document.getElementById('increment-btn');
+        let decrementBtn = document.getElementById('decrement-btn');
+        let resetBtn = document.getElementById('reset-btn');
+        let count = 0;
+
+        incrementBtn.addEventListener('click', () => {
+            count++;
+            counterDisplay.textContent = count;
+        });
+
+        decrementBtn.addEventListener('click', () => {
+            count--;
+            counterDisplay.textContent = count;
+        });
+
+        resetBtn.addEventListener('click', () => {
+            count = 0;
+            counterDisplay.textContent = count;
+        });
+    </script>
+</body>
+</html>
