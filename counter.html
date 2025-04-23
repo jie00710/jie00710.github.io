@@ -82,21 +82,34 @@
         let incrementBtn = document.getElementById('increment-btn');
         let decrementBtn = document.getElementById('decrement-btn');
         let resetBtn = document.getElementById('reset-btn');
-        let count = 0;
+        const STORAGE_KEY = 'myCounterValue'; // 定義一個用於儲存的 key
+
+        // 載入儲存的計數值
+        let count = localStorage.getItem(STORAGE_KEY);
+        if (count === null) {
+            count = 0; // 如果沒有儲存過，則從 0 開始
+        } else {
+            count = parseInt(count); // 將儲存的字串轉換為數字
+        }
+        counterDisplay.textContent = count; // 顯示載入的計數值
+
+        // 更新並儲存計數值的函數
+        function updateCounter(newValue) {
+            count = newValue;
+            counterDisplay.textContent = count;
+            localStorage.setItem(STORAGE_KEY, count); // 將計數值儲存到 Local Storage
+        }
 
         incrementBtn.addEventListener('click', () => {
-            count++;
-            counterDisplay.textContent = count;
+            updateCounter(count + 1);
         });
 
         decrementBtn.addEventListener('click', () => {
-            count--;
-            counterDisplay.textContent = count;
+            updateCounter(count - 1);
         });
 
         resetBtn.addEventListener('click', () => {
-            count = 0;
-            counterDisplay.textContent = count;
+            updateCounter(0); // 重置為 0
         });
     </script>
 </body>
